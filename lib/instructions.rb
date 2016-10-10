@@ -1,3 +1,5 @@
+# require './lib/mastermind.rb'
+
 class Instructions
   def play_instructions
     puts "\tI have generated a beginner sequence with four elements made up of:
@@ -16,6 +18,11 @@ class Instructions
     def greeting
       puts "Welcome to Mastermind"
       puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
+    end
+
+    def winner!
+      puts "Congratulations! You guessed the sequence #{@sequence.upcase} in #{guess_count} guesses over #{minutes.abs} minutes and #{seconds.abs} seconds."
+      puts "Do you want to (p)lay again or (q)uit?"
     end
 
 end

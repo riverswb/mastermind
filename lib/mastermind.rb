@@ -31,9 +31,10 @@ class Mastermind
     #   (run_mastermind && mastermind_instructions) if input == "i" || input == "instructions"
     #    "I'm sorry, I don't know how to #{input}!" if input != "q" || input != "i" || input != "p"
     input = gets.chomp.downcase
-    instructions.quit_mastermind if input == "q" || input == "quit"
-    if input == "p" || input == "play"
-      get_sequence
+    if input == "q" || input == "quit"
+      instructions.quit_mastermind
+    elsif input == "p" || input == "play"
+      get_sequence_beginner
       play_mastermind
     elsif input == "i" || input == "instructions"
       instructions.mastermind_general_instructions
@@ -46,14 +47,15 @@ class Mastermind
   def play_mastermind
     instructions.play_instructions
     @guess = gets.chomp.downcase
-    instructions.quit_mastermind if guess == "q" || guess == "quit"
-    if guess == "c" || guess == "cheat"
+    if guess == "q" || guess == "quit"
+      instructions.quit_mastermind
+    elsif guess == "c" || guess == "cheat"
       puts sequence
       play_mastermind
-    elsif guess.length < 4
+    elsif guess.length < sequence.length
       puts "Guess to short!"
       play_mastermind
-    elsif guess.length > 4
+    elsif guess.length > sequence.length
       puts "Guess to long!"
       play_mastermind
     elsif guess == sequence
@@ -61,8 +63,8 @@ class Mastermind
       end_game
     elsif guess != sequence
       feedback
-      puts "#{guess.upcase} has #{elements} of the correct elements with #{positions} in the correct positions"
-      puts "You've taken #{guess_count} guess(es)"
+      # puts "#{guess.upcase} has #{elements} of the correct elements with #{positions} in the correct positions"
+      # puts "You've taken #{guess_count} guess(es)"
         play_mastermind
     end
   end
@@ -86,23 +88,31 @@ class Mastermind
   #   puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
   # end
 
-  def get_sequence
+  def get_sequence_beginner
     possible = ["r","r","r","r","g","g","g","g","b","b","b","b","y","y","y","y"]
     @sequence = possible.shuffle.take(4).join
   end
 
   def feedback
-    @elements = 0
-    @positions = 0
+    # @elements = 0
+    # @positions = 0
     @guess_count += 1
-    poop = guess.split("")
-    seq = sequence.split("")
-    poop.each do |p|
-      @elements += 1 if seq.include?(p)
+    input = guess.chars
+    answer = sequence.chars
+    input.each do |i|
+      answer.include?(i)
+      (p = answer.find_index(i)) && answer.delete_at(p)
+      # binding.pry
+      # sequence.length - answer.length
     end
-    poop.zip(seq).each do |n|
-      @positions += 1 if n[0] == n[1]
+    @elements = sequence.length - answer.length
+    # @elements = element_count.reduce(:+)
+    answer = sequence.chars
+    @positions = input.zip(answer).count do |n|
+      n[0] == n[1]
     end
+      puts "'#{guess.upcase}' has #{elements} of the correct elements with #{positions} in the correct positions"
+      puts "You've taken #{guess_count} guess(es)"
   end
 
   def end_game
@@ -114,7 +124,7 @@ class Mastermind
     puts "Do you want to (p)lay again or (q)uit?"
     input = gets.chomp
     if input == "q" || input == "quit"
-      instructions.quit_mastermind 
+      instructions.quit_mastermind
     elsif input == "p" || input == "play"
       @guess_count = 0
       run_mastermind
