@@ -20,11 +20,16 @@ class Mastermind
       quit_mastermind
     elsif guess == "c" || guess == "cheat"
       get_cheat
+    elsif guess == answer
+      end_game
     elsif guess.length < sequence.length
       p "Too short!"
     elsif guess.length > sequence.length
-      p"Too long!"
-    else puts "I don't know how to #{guess}."
+      p "Too long!"
+    elsif guess != answer
+        feedback
+    else
+      puts "I don't know how to #{guess}."
     end
   end
 
@@ -39,6 +44,15 @@ class Mastermind
   def sequence
     possible = ["r","g","b","y"]
     @answer = (possible * 4).shuffle.take(4).join("")
+  end
+
+  def end_game
+    p "Congratulations!"
+  end
+
+  def feedback
+    p "'RRGB' has 3 of the correct elements with 2 in the correct positions
+        You've taken 1 guess"
   end
 
 

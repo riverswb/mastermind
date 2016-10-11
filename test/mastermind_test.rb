@@ -56,4 +56,18 @@ class MastermindTest < Minitest::Test
     assert_equal "Too long!", mm.get_guess("ssssss")
   end
 
+  def test_it_goes_to_end_game_if_guess_equals_answer
+    mm = Mastermind.new
+    mm.get_guess("c")
+    mm.get_guess(mm.answer)
+
+    assert mm.end_game
+  end
+
+  def test_it_goes_to_feedback_if_guess_is_incorrect
+    mm = Mastermind.new
+    mm.get_guess("gggg")
+
+    assert mm.feedback
+  end
 end
