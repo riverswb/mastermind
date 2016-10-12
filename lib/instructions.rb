@@ -21,23 +21,25 @@ class Instructions
   end
 
   def winner!
-    puts "Congratulations! You guessed the sequence #{@sequence.upcase} in #{guess_count} guesses over #{minutes.abs} minutes and #{seconds.abs} seconds."
+    puts "Congratulations! You guessed the sequence #{@guess} in #{@guess_count} guesses over #{minutes.abs} minutes and #{seconds.abs} seconds."
     puts "Do you want to (p)lay again or (q)uit?"
   end
 
   def quit_mastermind
     puts "Good Bye!"
+    exit
   end
 
   def play_instructions
     beg = "beginner" if @difficulty_level == "b"
     int = "intermediate" if @difficulty_level == "i"
     adv = "advanced" if @difficulty_level == "a"
-    binding.pry
 
     d = "four" if beg == "beginner"
     e = "six" if int == "intermediate"
     f = "eight" if adv == "advanced"
+
+
 
   puts "\tI have generated a #{beg}#{int}#{adv} sequence with #{d}#{e}#{f} elements made up of:
     (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.

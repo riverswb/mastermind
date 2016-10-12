@@ -104,19 +104,25 @@ class Mastermind
     p "Cheater! The answer is '#{answer.upcase}'"
   end
 
-  # def sequence
-  #   possible = ["r","g","b","y"]
-  #   @answer = (possible * 4).shuffle.take(4).join("")
-  # end
-
   def end_game
     @guess_count += 1
     end_time = Time.now
     time = (((end_time - start_time) / 60).divmod 1)
     minutes = time[0]
     seconds = (time[1] * 60).round
-    p "Congratulations! You guessed the sequence '#{answer.upcase}' in #{guess_count} over #{minutes} minutes, #{seconds} seconds.
-      Do you want to (p)lay again or (q)uit? "
+    # instructions.winner!
+    p "Congratulations! You guessed the sequence '#{answer.upcase}' in #{guess_count} guess(es) over #{minutes} minutes, #{seconds} seconds."
+    p  "Do you want to (p)lay again or (q)uit?"
+    input = gets.chomp
+    if input == "q" || input == "quit"
+      instructions.quit_mastermind
+    elsif input == "p" || input == "play"
+      @guess_count = 0
+      start_mastermind
+    else
+      puts "I'm sorry, I don't know how to #{input}, GAME OVER."
+      exit
+    end
   end
 
   def feedback
@@ -146,8 +152,11 @@ class Mastermind
     e = "six" if int == "intermediate"
     f = "eight" if adv == "advanced"
 
+    w = ", (w)hite" if e == "six"
+    q = "(w)hite, (p)urple" if f == "eight"
+
   puts "\tI have generated a #{beg}#{int}#{adv} sequence with #{d}#{e}#{f} elements made up of:
-    (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
+    (r)ed, (g)reen, (b)lue#{w}#{q} and (y)ellow. Use (q)uit at any time to end the game.
     What's your guess?"
   end
 
