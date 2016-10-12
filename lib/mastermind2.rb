@@ -1,5 +1,5 @@
 require 'pry'
-require "./lib/instructions.rb"
+require_relative "instructions"
 require './lib/difficulty.rb'
 
 class Mastermind
@@ -27,7 +27,7 @@ class Mastermind
   def difficulty_level
     @difficulty_level
   end
-  
+
   def run_mastermind
     choose_difficulty
     instructions.greeting
