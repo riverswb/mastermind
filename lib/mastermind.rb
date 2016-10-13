@@ -12,8 +12,8 @@ class Mastermind
               :input,
               :instructions,
               :difficulty_level,
-              :difficulty,
-              :start_time
+              :difficulty
+
   attr_accessor :guess, :answer, :start_time, :time
   def initialize
     @answer = answer
@@ -25,19 +25,18 @@ class Mastermind
     @instructions = Instructions.new
     @difficulty_level = difficulty_level
     @difficulty = Difficulty.new
-    @start_time = start_time
     @time = GameTime.new
   end
 
   def start_mastermind
     instructions.greeting
-    @input = gets.chomp.downcase
+     @input = gets.chomp.downcase
     start_options
   end
 
   def get_guess
     play_instructions
-    @guess = gets.chomp.downcase
+     @guess = gets.chomp.downcase
     guess_actions
   end
 
@@ -55,7 +54,7 @@ class Mastermind
           p "Try again!"
           start_mastermind
         end
-        get_guess
+         get_guess
     elsif input == "i" || input == "instructions"
       instructions.mastermind_general_instructions
       start_mastermind
@@ -69,7 +68,7 @@ class Mastermind
 
   def choose_difficulty
     difficulty.difficulty_level
-    @difficulty_level = gets.chomp.downcase
+     @difficulty_level = gets.chomp.downcase
   end
 
 
@@ -78,20 +77,20 @@ class Mastermind
       quit_mastermind
     elsif guess == "c" || guess == "cheat"
       get_cheat
-        get_guess
+         get_guess
     elsif guess == answer
       end_game
     elsif guess.length < answer.length
       p "Too short!"
-        get_guess
+         get_guess
     elsif guess.length > answer.length
       p "Too long!"
-        get_guess
+         get_guess
     elsif guess != answer
         feedback
     else
       puts "I don't know how to #{guess}."
-        get_guess
+         get_guess
     end
   end
 

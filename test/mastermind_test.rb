@@ -47,16 +47,8 @@ class MastermindTest < Minitest::Test
     assert_equal "Too long!", mm.guess_actions
   end
 
-  def test_it_goes_to_end_game_if_guess_equals_answer
-    mm = Mastermind.new
-    mm.start_time = Time.now
-    mm.guess = "rgby"
-    mm.answer = "rgby"
-
-    assert_equal "End Game", mm.guess_actions
-  end
-
   def test_it_goes_to_feedback_if_guess_is_incorrect
+
     mm = Mastermind.new
     mm.guess = "grby"
     mm.answer = "rgyb"
@@ -64,8 +56,8 @@ class MastermindTest < Minitest::Test
     assert_equal ("You've"), mm.guess_actions[0..5]
   end
 
-
   def test_feedback_can_calculcate_the_number_of_correct_elements_
+
     mm = Mastermind.new
     mm.answer = "rgby"
     mm.guess = "bgby"
@@ -75,6 +67,7 @@ class MastermindTest < Minitest::Test
   end
 
   def test_it_can_tell_how_many_are_in_correct_position
+
     mm = Mastermind.new
     mm.answer = "rbbg"
     mm.guess = "rrbg"
@@ -84,6 +77,7 @@ class MastermindTest < Minitest::Test
   end
 
   def test_it_keeps_up_with_the_guess_count
+
     mm = Mastermind.new
     mm.answer = "gggg"
     mm.guess = "rrrr"
@@ -96,44 +90,4 @@ class MastermindTest < Minitest::Test
 
     assert_equal 3, mm.guess_count
   end
-
-  def test_it_has_a_start_time
-    mm = Mastermind.new
-    mm.start_time = Time.now
-
-    assert_equal Time, mm.start_time.class
-  end
-
-  def test_when_game_ends_it_calculates_time_elapsed
-    mm = Mastermind.new
-    mm.start_time = Time.now - 30
-  end
 end
-
-# def test_user_can_make_a_guess
-#   mm = Mastermind.new
-#   mm.("t")
-#   assert_equal "t" , mm.guess
-# end
-
-# def test_guess_from_user_input_is_case_insensitive
-#   mm = Mastermind.new
-#   mm.guess = "Q"
-#
-#   assert_equal "q", mm.guess
-# end
-
-#
-# def test_get_guess_method
-#   mm = Mastermind.new
-#
-# end
-
-
-
-# def test_feedback_prints_the_guess_upcased
-#   mm = Mastermind.new
-#   mm.get_guess("rbyg")
-#
-#   assert_equal "RBYG", mm.guess.upcase
-# end
