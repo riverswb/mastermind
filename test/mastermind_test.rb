@@ -16,39 +16,44 @@ class MastermindTest < Minitest::Test
     assert_equal "Good Bye!", mm.guess_actions
   end
 
-  def test_it_has_a_sequence
+  def test_it_has_an_answer
     mm = Mastermind.new
+    mm.answer = "rgby"
 
-    assert_equal 4, mm.sequence.length
+    assert_equal 4, mm.answer.length
   end
-  #
+
   def test_if_guess_is_c_or_cheat_print_the_sequence
     mm = Mastermind.new
     mm.guess = ("c")
+    mm.answer = "test"
 
-    assert_equal "Cheater!", mm.guess_actions
+    assert_equal "Cheater!", mm.guess_actions[0..7]
   end
 
   def test_knows_if_guess_is_too_short
     mm = Mastermind.new
-    mm.guess = ("s")
+    mm.guess = "s"
+    mm.answer = "test"
 
     assert_equal "Too short!", mm.guess_actions
   end
 
   def test_it_knows_if_it_is_too_long
     mm = Mastermind.new
-    mm.guess = ("ssssss")
+    mm.guess = "ssssss"
+    mm.answer = "test"
 
     assert_equal "Too long!", mm.guess_actions
   end
 
   def test_it_goes_to_end_game_if_guess_equals_answer
     mm = Mastermind.new
+    mm.start_time = Time.now
     mm.guess = "rgby"
     mm.answer = "rgby"
 
-    assert_equal "Congratulations!", mm.guess_actions
+    assert_equal "End Game", mm.guess_actions
   end
 
   def test_it_goes_to_feedback_if_guess_is_incorrect
@@ -56,7 +61,7 @@ class MastermindTest < Minitest::Test
     mm.guess = "grby"
     mm.answer = "rgyb"
 
-    assert_equal ("feedback"), mm.guess_actions
+    assert_equal ("You've"), mm.guess_actions[0..5]
   end
 
 
@@ -80,17 +85,28 @@ class MastermindTest < Minitest::Test
 
   def test_it_keeps_up_with_the_guess_count
     mm = Mastermind.new
+    mm.answer = "gggg"
     mm.guess = "rrrr"
     mm.guess_actions
 
     assert_equal 1, mm.guess_count
 
-    mm.guess = "bbbb"
     mm.guess_actions
-    mm.guess = "yyyy"
     mm.guess_actions
 
     assert_equal 3, mm.guess_count
+  end
+
+  def test_it_has_a_start_time
+    mm = Mastermind.new
+    mm.start_time = Time.now
+
+    assert_equal Time, mm.start_time.class
+  end
+
+  def test_when_game_ends_it_calculates_time_elapsed
+    mm = Mastermind.new
+    mm.start_time = Time.now - 30
   end
 end
 

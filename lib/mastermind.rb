@@ -1,6 +1,8 @@
 require 'pry'
 require './lib/instructions.rb'
 require './lib/difficulty'
+require './lib/game_time'
+require './lib/repl'
 
 class Mastermind
   attr_reader :answer,
@@ -12,7 +14,7 @@ class Mastermind
               :difficulty_level,
               :difficulty,
               :start_time
-  attr_accessor :guess, :answer
+  attr_accessor :guess, :answer, :start_time, :time
   def initialize
     @answer = answer
     @guess = guess
@@ -24,6 +26,7 @@ class Mastermind
     @difficulty_level = difficulty_level
     @difficulty = Difficulty.new
     @start_time = start_time
+    @time = GameTime.new
   end
 
   def start_mastermind
@@ -32,9 +35,15 @@ class Mastermind
     start_options
   end
 
+  def get_guess
+    play_instructions
+    @guess = gets.chomp.downcase
+    guess_actions
+  end
+
   def start_options
     if input == "p" || input == "play"
-      @start_time = Time.now
+      @start_time = time.start
       choose_difficulty
         if difficulty_level == "b"
           @answer = difficulty.get_answer_beginner
@@ -53,7 +62,7 @@ class Mastermind
     elsif input == "q" || input == "quit"
       quit_mastermind
     else
-      p "I'm sorry, I don't know how to #{input}, please try again."
+      p "I'm sorry, I don't know how to  #{input}, please try again."
       start_mastermind
     end
   end
@@ -63,31 +72,26 @@ class Mastermind
     @difficulty_level = gets.chomp.downcase
   end
 
-  def get_guess
-    play_instructions
-    @guess = gets.chomp.downcase
-    guess_actions
-  end
 
   def guess_actions
     if guess == "q" || guess == "quit"
       quit_mastermind
     elsif guess == "c" || guess == "cheat"
       get_cheat
-      get_guess
+        get_guess
     elsif guess == answer
       end_game
     elsif guess.length < answer.length
       p "Too short!"
-      get_guess
+        get_guess
     elsif guess.length > answer.length
       p "Too long!"
-      get_guess
+        get_guess
     elsif guess != answer
         feedback
     else
       puts "I don't know how to #{guess}."
-      get_guess
+        get_guess
     end
   end
 
@@ -106,11 +110,9 @@ class Mastermind
 
   def end_game
     @guess_count += 1
-    end_time = Time.now
-    time = (((end_time - start_time) / 60).divmod 1)
-    minutes = time[0]
-    seconds = (time[1] * 60).round
-    # instructions.winner!
+    time.end
+    minutes = time.minutes_elapsed
+    seconds = time.seconds_elapsed
     p "Congratulations! You guessed the sequence '#{answer.upcase}' in #{guess_count} guess(es) over #{minutes} minutes, #{seconds} seconds."
     p  "Do you want to (p)lay again or (q)uit?"
     input = gets.chomp
@@ -121,7 +123,7 @@ class Mastermind
       start_mastermind
     else
       puts "I'm sorry, I don't know how to #{input}, GAME OVER."
-      exit
+        exit
     end
   end
 
@@ -134,13 +136,13 @@ class Mastermind
       (p = sequence.find_index(color)) && sequence.delete_at(p)
     end
     @elements = answer.length - sequence.length
-    @positions = guess.chars.zip(answer.chars).count do |n|
-      n[0] == n[1]
+    @positions = guess.chars.zip(answer.chars).count do |color|
+      color[0] == color[1]
     end
 
     p "'#{guess.upcase}' has #{elements} of the correct elements with #{positions} in the correct positions"
-    p  "You've taken #{guess_count} guess"
-    get_guess
+    p  "You've taken #{guess_count} guess(es)"
+      get_guess
   end
 
   def play_instructions
