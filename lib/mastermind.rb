@@ -2,7 +2,6 @@ require 'pry'
 require './lib/instructions.rb'
 require './lib/difficulty'
 require './lib/game_time'
-require './lib/repl'
 
 class Mastermind
   attr_reader :answer,
